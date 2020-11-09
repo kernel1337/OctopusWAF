@@ -20,7 +20,7 @@ $ bin/OctopusWAF -h 127.0.0.1:2006 -r 127.0.0.1:80 -m horspool --debug
 Open your browser in http://127.0.0.1:2006
 
 ```
-Don't execute with "cd bin; ./OctopusWAF" use full path "bin/OctopusWAF", because binary need load content in config indirectory.
+Don't execute with "cd bin; ./OctopusWAF" use full path "bin/OctopusWAF", because binary need load content in config directory.
 
 Tested on Linux but can run in FreeBSD.
 
