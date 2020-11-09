@@ -8,6 +8,7 @@ First step
 ---
 
 Instal lib-pcre, if you use RPM based distros search pcre-devel package, in BSD based search in ports or brew...
+Need libevent-dev, on RPM distros libevent-devel, Openssl-dev and openssl-devel.
 
 To compile and run OctopusWAF follow this commands:
 ```
