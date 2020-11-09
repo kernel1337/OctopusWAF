@@ -1,0 +1,1 @@
+(alert|eval|<script>|2=2|1=1)

@@ -1,2 +1,9 @@
-# OctopusWAF
-Web application firewall made in C linguage and use libevent.
+# raptorwaf2
+OCTOPUS WAF 
+
+OctopusWAF is a open source Web application firewall, is made in C language uses libevent to multiple connections.
+
+
+
+
+
