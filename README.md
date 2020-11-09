@@ -7,9 +7,9 @@ OctopusWAF is a open source Web application firewall, is made in C language uses
 First step
 ---
 
-Instal lib-pcre or in RPM based distros search pcre-devel, in BSD search in ports...
+Instal lib-pcre, if you use RPM based distros search pcre-devel package, in BSD based search in ports or brew...
 
-To run OctopusWAF follow this commands:
+To compile and run OctopusWAF follow this commands:
 ```
 $ git clone https://github.com/CoolerVoid/OctopusWAF
 $ cd OctopusWAF; make
@@ -17,6 +17,7 @@ $ bin/OctopusWAF
 ```
 Don't execute with "cd bin; ./OctopusWAF" use full path "bin/OctopusWAF", because binary need load content in config indirectory.
 
+Tested on Linux but can run in FreeBSD.
 
 
 Code overview
@@ -38,12 +39,22 @@ SUM:                            25            394            208           1242
 TODO:
 ---
 Resource to load modsec rules https://github.com/SpiderLabs/owasp-modsecurity-crs/
+
 Insert rules to detect XSS
+
 Insert rules to detect SQLi
+
 Insert rules to detect RCE
+
 Insert rules to detect RFI/LFI
+
 Insert rules to detect XXE
+
 Insert rules to detect Anomalys...
+
+Channel for TLS
+
+Cert Load
 
 
 
