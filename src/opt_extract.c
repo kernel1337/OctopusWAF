@@ -34,7 +34,7 @@ void option_banner_octopus(void)
 	"\tConfig list rules of regex matchs using PCRE at config/regex_rules.txt\n"
 	"\tExample: \n"
 	YELLOW
-	"\t$ bin/OctopusWAF -h 127.0.0.1:80 -r 127.0.0.1:8090 -d -m horspool --debug\n"
+	"\t$ bin/OctopusWAF -h 127.0.0.1:8090 -r 127.0.0.1:80 -d -m horspool --debug\n"
 	LAST
 
  );
@@ -136,7 +136,7 @@ void parser_opts(int argc, char **argv)
      					init_banner_octopus();
 					option_banner_octopus();
      					DEBUG("Option -%c requires an argument.\n", optopt); 
-					DIE("Try again using other argument...");
+					die("Try again using other argument...");
     				}
 			break;
 

@@ -67,7 +67,6 @@ char *matchlist(char *input,int input_len, short option_algorithm)
 	{
 		DEBUG("Error in close() file config/matchlist_ip.txt ");
 		exit(0);
-		return NULL;
 	}
 		
 	arq=NULL;

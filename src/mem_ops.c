@@ -41,7 +41,7 @@ void *xmallocarray (size_t nmemb, size_t size)
 static void *xmalloc_fatal(size_t size) 
 {
 	DEBUG("\n Size dbg: %lu\n",size);
-	DIE("Memory FAILURE!");
+	DIE("Memory FAILURE!");	
 }
 
 void *xmalloc (size_t size) 

@@ -4,22 +4,13 @@
 void isnull_argv() 
 {
 	if(strnlen(param.hostarg,128)==0)
-	{
-		DEBUG("Need host argument\n");
-		exit(0);
-	}
+		die("Need host argument\n");
 
 	if(strnlen(param.redirectarg,128)==0)
-	{
-		DEBUG("Need redirect argument");
-		exit(0);
-	}
+		die("Need redirect argument");
 
 	if(!(param.option_algorithm<=4 && param.option_algorithm>=1))
-	{
-		DEBUG("Need log argument");
-		exit(0);
-	}
+		die("Need log argument");
 
 }
 
