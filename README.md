@@ -15,12 +15,17 @@ To compile and run OctopusWAF follow this commands:
 $ git clone https://github.com/CoolerVoid/OctopusWAF
 $ cd OctopusWAF; make
 $ bin/OctopusWAF
-Example tested on DVWA
+
+Example tested on DVWA on simple HTTP channel
+
 $ bin/OctopusWAF -h 127.0.0.1:2006 -r 127.0.0.1:80 -m horspool --debug
+
 Open your browser in http://127.0.0.1:2006
 
 ```
-Don't execute with "cd bin; ./OctopusWAF" use full path "bin/OctopusWAF", because binary need load content in config directory.
+
+* Notes: Don't execute with "cd bin; ./OctopusWAF" use full path "bin/OctopusWAF", because binary need load content in config directory.
+Use HTTP only for WAF usage, this version 0.1 run TLS but don't have resource to load cert and read TLS requests/responses, if you use TLS the service can lost WAF function and work like reverse proxy.
 
 Tested on Linux but can run in FreeBSD.
 
