@@ -1,5 +1,18 @@
+#include <assert.h>
 #include "mem_ops.h"
 #include "utils.h"
+
+char *xstrdup( char *str )
+{
+  char *p;
+
+  assert( str );
+
+  if ( ! ( p = strdup( str ) ) )
+    die( "Error duplicating string.\n" );
+
+  return p;
+}
 
 // based in OpenBSD reallocarray() function http://man.openbsd.org/reallocarray.3
 void *xallocaarray (size_t nmemb, size_t size) 
@@ -16,13 +29,10 @@ void *xallocaarray (size_t nmemb, size_t size)
 	if (ptr == NULL)
 		die("error in xallocarray() function");
 
-
 	memset(ptr,'\0',maxmem);
 
 	return ptr;
 }
-
-
 
 // based in OpenBSD reallocarray() function http://man.openbsd.org/reallocarray.3
 void *xmallocarray (size_t nmemb, size_t size) 
