@@ -15,7 +15,6 @@
 #define MUL_NO_OVERFLOW ((size_t)1 << (sizeof(size_t)*4))
 
 // i don't using all functions... but at the future i need it
-char *xstrdup ( char *str );
 void *xallocaarray ( size_t nmemb, size_t size );
 void *xmallocarray ( size_t nmemb, size_t size );
 void *xmalloc ( size_t size );

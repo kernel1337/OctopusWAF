@@ -149,4 +149,19 @@ strnstr(const char *s, const char *find, size_t slen)
 }
 
 
+//custom func 
+char *xstrndup(const char *s, size_t n)
+{
+	char* new = xmalloc(n+1);
+
+	if (new) 
+	{
+		strncpy(new, s, n);
+		new[n] = '\0';
+	}
+
+	return new;
+}
+
+
 #endif /* ! __*BSD__ */

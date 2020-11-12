@@ -53,7 +53,7 @@ void load_signal_alarm ( void )
   if ( sigemptyset ( &sigIntHandler.sa_mask ) )
   {
     DEBUG ( "Error at signal" );
-    exit ( 1 );   // FIXME: Should be EXIT_FAILURE, isn't it?
+    exit (0);   
   }
 
   p = signals;
@@ -62,7 +62,7 @@ void load_signal_alarm ( void )
     if ( sigaction ( *p, &sigIntHandler, NULL ) )
     {
       DEBUG ( "Error at signal" );
-      exit ( 1 );   // FIXME: Should be EXIT_FAILURE, isn't it?
+      exit (0);   
     }
 
     p++;
@@ -73,6 +73,9 @@ char from_hex ( char ch )
 {
   return isdigit ( ch ) ? ch - '0' : tolower ( ch ) - 'a' + 10;
 }
+
+
+
 
 char *urldecode ( char *str, int size )
 {
@@ -118,87 +121,100 @@ char *deadspace ( char *str )
 }
 
 
-// DFA to test if letter between a-z or A-Z
-int test_letter ( char p )
-{
-  switch ( p )
-  {
-    case 'A':
-    case 'B':
-    case 'C':
-    case 'D':
-    case 'E':
-    case 'F':
-    case 'G':
-    case 'H':
-    case 'I':
-    case 'J':
-    case 'K':
-    case 'L':
-    case 'M':
-    case 'N':
-    case 'O':
-    case 'P':
-    case 'Q':
-    case 'R':
-    case 'S':
-    case 'T':
-    case 'U':
-    case 'V':
-    case 'W':
-    case 'X':
-    case 'Y':
-    case 'Z':
-    case 'a':
-    case 'b':
-    case 'c':
-    case 'd':
-    case 'e':
-    case 'f':
-    case 'g':
-    case 'h':
-    case 'i':
-    case 'j':
-    case 'k':
-    case 'l':
-    case 'm':
-    case 'n':
-    case 'o':
-    case 'p':
-    case 'q':
-    case 'r':
-    case 's':
-    case 't':
-    case 'u':
-    case 'v':
-    case 'w':
-    case 'x':
-    case 'y':
-    case 'z':
-      return 0;
-  }
 
-  return 1;
+// DFA to test if letter between a-z or A-Z
+int test_letter(char p)
+{
+	unsigned char yych;
+
+	yych = p;
+	switch (yych) {
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy3;
+	default:	goto yy2;
+	}
+yy2:
+	{ return 1; }
+yy3:
+	++p;
+	{ return 0; }
+    
+
 }
 
+
 // random case return string, input= tomato output=ToMatO or tOmATo...
-// FIXME: It doen't do what it's said... :(
-char *all2lowcase ( char *str )
+char *all2lowcase(char *str)
 {
-  assert( str );
+	char *str_new=xmallocarray(sizeof(char),strlen(str)+1);
+	int i=0;
+	
+	while(*str != '\0')
+	{
+		
+		if(!test_letter( *str ) )
+		{
 
-  // FIX: Easier if substitute this with strdup().
-  char *str_new = xstrdup ( str );
-  char *p;
+			*(str_new+i)=*str | 0x20;	
+			i++;
+		} else {
+			*(str_new+i)=*str;
+			i++;
+		}	
+		str++;	
+	}
 
-  p = str_new;
-  while ( *p )
-  {
-    if ( ! test_letter ( *p ) )
-      *p ^= 0x20;    // FIX: This will work as intended
 
-    p++;
-  }
+	return str_new;
 
-  return str_new;
 }

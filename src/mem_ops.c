@@ -2,17 +2,6 @@
 #include "mem_ops.h"
 #include "utils.h"
 
-char *xstrdup( char *str )
-{
-  char *p;
-
-  assert( str );
-
-  if ( ! ( p = strdup( str ) ) )
-    die( "Error duplicating string.\n" );
-
-  return p;
-}
 
 // based in OpenBSD reallocarray() function http://man.openbsd.org/reallocarray.3
 void *xallocaarray (size_t nmemb, size_t size) 

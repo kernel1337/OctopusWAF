@@ -29,6 +29,7 @@ char *addr_2_str(struct sockaddr *res)
 // blockmsg
 void block_msg(struct bufferevent *bev)
 {
+	/* hide msg error to gain performance
 	char *block_msg=
 			"HTTP/1.1 404 Not Found\r\n"
 			"Content-type: text/html\r\n"
@@ -40,7 +41,8 @@ void block_msg(struct bufferevent *bev)
 			" </body>\r\n"
 			"</html>\r\n";
 	bufferevent_write(bev, block_msg, strlen(block_msg));
-//	bufferevent_free(bev);
+	*/
+	bufferevent_free(bev);
 }
 
 // if return true, blocks...

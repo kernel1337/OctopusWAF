@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include "mem_ops.h"
 /*	$OpenBSD: strlcpy, strlcat,v 1.11 2006/05/05 15:27:38 millert Exp $	*/
 
 /*
@@ -61,6 +62,10 @@ size_t strlcat(char *dst, const char *src, size_t siz);
  * SUCH DAMAGE.
  */
 char *strnstr(const char *s, const char *find, size_t slen);
+
+
+char *xstrndup(const char *s, size_t n);
+
 
 #endif /* ! __*BSD__ */
 

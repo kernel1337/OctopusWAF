@@ -73,7 +73,7 @@ char *matchlist(char *input,int input_len, short option_algorithm)
 
 	if(at_list==true) 
 	{
-		char *tmp=strdup(line);
+		char *tmp=xstrndup(line,1023);
 		return tmp;
 	} else
 		return NULL;
