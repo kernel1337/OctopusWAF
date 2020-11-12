@@ -2,9 +2,10 @@ export MALLOC_MMAP_THRESHOLD_=1
 export MALLOC_CHECK_=1
 export MALLOC_PERTURB_=1
 CC=gcc
-CFLAGS=-W -Wall -O2 -Wno-unused-variable -Wno-unused-parameter
-HARDENING= -mmitigate-rop -fstack-protector-all -pie -fPIE -ftrapv
-DFLAGS= -levent_openssl -levent_pthreads -lpthread -lssl -lcrypto -levent -lpcre 
+# -mmitigate-rop is obsolete.
+HARDENING=-fstack-protector-all -pie -fPIE -ftrapv
+CFLAGS=-W -Wall -O2 -Wno-unused-variable -Wno-unused-parameter $(HARDENING)
+LIBS=-levent_openssl -lssl -lcrypto -levent -lpcre 
 DIR=src/
 DIR_HEADERS=src/headers/
 DIROUT=bin/
@@ -23,9 +24,12 @@ OctopusWAF: $(DIR)OctopusWAF.c
 	@echo "    '\( ,_.-'                                           "  
 	@echo "       \\               \"             \"          Compile !"    
 	@echo "       ^\' "
-	$(CC) $(CFLAGS) $(DFLAGS) -c $(DIR)*.c -I$(DIR_HEADERS) -Ilib
-	$(CC) -o $(DIROUT)OctopusWAF *.o $(LDFLAGS) $(HARDENING) $(DFLAGS)  
+	$(CC) $(CFLAGS) -c $(DIR)*.c -I$(DIR_HEADERS) 
+	$(CC) -o $(DIROUT)OctopusWAF *.o $(LDFLAGS) $(LIBS)  
 	@echo "  "
 	@echo " Execute \"bin/OctopusWAF\" to start...  "   
+
+.PHONY: clean
+
 clean:
-	rm -f *.o OctopusWAF
+	rm -f *.o $(DIROUT)OctopusWAF
