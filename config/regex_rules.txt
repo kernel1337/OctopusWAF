@@ -1,6 +1,6 @@
-select|insert|update|delete|drop|union
+(select|insert|update|delete|drop|union).*
 version.*\@
 [0-9]=[0-9].*
-eval\(
-alert\(
+eval\(.*
+alert\(.*
 \<script.*script\>
