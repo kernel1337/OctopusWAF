@@ -45,6 +45,46 @@ void block_msg(struct bufferevent *bev)
 	bufferevent_free(bev);
 }
 
+
+// jack the ripper function 
+// func to split request in chunks, util because a lot functions cannot match request buffer in full mode
+bool split_and_check(char * input,  bool (*lambda)(char *argvs))
+{
+	bool test=false;
+	char *delim = "\n";
+	char *ptr = strtok(input, delim);
+
+	while(ptr != NULL && test != true)
+	{
+		test=lambda(ptr);
+		ptr = strtok(NULL, delim);
+	}
+
+	return test;
+
+}
+
+// detect sqli using libinjection
+bool libinjection_test_sqli(char * in)
+{
+	struct libinjection_sqli_state state;
+	int issqli;
+
+	size_t slen = strlen(in);
+
+	libinjection_sqli_init(&state, in, slen, FLAG_NONE);
+	issqli = libinjection_is_sqli(&state);
+
+ 		if (issqli) 
+		{
+        		fprintf(stdout, "sqli detected with fingerprint of '%s'\n", state.fingerprint);
+			return true;
+    		}
+
+	return false;
+}
+
+
 // if return true, blocks...
 bool filter_check(struct bufferevent *bev)
 {
@@ -61,21 +101,32 @@ bool filter_check(struct bufferevent *bev)
 
 		if(is_request(tmpbuf))
 		{
-			char *match_string=matchlist(tmpbuf,strlen(tmpbuf), param.option_algorithm);
-
-			if(match_string != NULL)
+			if(param.option_algorithm)
 			{
-				test=true;
+				char *match_string=matchlist(tmpbuf,strlen(tmpbuf), param.option_algorithm);
 
-				if(param.debug==true)
-					printf("input: %s\n", data);
+				if(match_string != NULL)
+				{
+					test=true;
+
+					if(param.debug==true)
+						printf("input: %s\n", data);
+				}
 			}
+
+			if(param.libinjection_sqli==true)
+				if(split_and_check(tmpbuf,libinjection_test_sqli)==true)
+				{
+					test=true;
+
+					if(param.debug==true)
+						printf("input: %s\n", data);
+				}
 		}
 
 	free(data);
 //	free(tmpbuf);
 
-	
 	return test;
 }
 

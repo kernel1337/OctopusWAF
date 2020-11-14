@@ -7,7 +7,9 @@ HARDENING=-fstack-protector-all -pie -fPIE -ftrapv
 CFLAGS=-W -Wall -O2 -Wno-unused-variable -Wno-unused-parameter $(HARDENING)
 LIBS=-levent_openssl -lssl -lcrypto -levent -lpcre 
 DIR=src/
+LIBINJECTION_DIR=lib/libinjection/
 DIR_HEADERS=src/headers/
+LIBINJECTION_HEADERS=lib/libinjection/headers/
 DIROUT=bin/
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
@@ -24,7 +26,7 @@ OctopusWAF: $(DIR)OctopusWAF.c
 	@echo "    '\( ,_.-'                                           "  
 	@echo "       \\               \"             \"          Compile !"    
 	@echo "       ^\' "
-	$(CC) $(CFLAGS) -c $(DIR)*.c -I$(DIR_HEADERS) 
+	$(CC) $(CFLAGS) -c $(DIR)*.c $(LIBINJECTION_DIR)*.c -I$(DIR_HEADERS) -I$(LIBINJECTION_HEADERS)
 	$(CC) -o $(DIROUT)OctopusWAF *.o $(LDFLAGS) $(LIBS)  
 	@echo "  "
 	@echo " Execute \"bin/OctopusWAF\" to start...  "   

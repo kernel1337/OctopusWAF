@@ -17,6 +17,8 @@ struct choice  {
  char hostarg[128];
  char redirectarg[128];
  bool debug;
+ bool libinjection_sqli;
+ bool libinjection_xss;
  short option_algorithm;
 };
 

@@ -15,63 +15,71 @@
 
 void die ( char *msg )
 {
-  puts ( msg );
-  exit ( 0 ); // FIXME: Should be EXIT_FAILURE, isn't it?
+	puts(msg);
+	exit(0); 
 }
 
 void No_Pause_Waf()
 {
-  DEBUG ( "\n"
-          " When start Waf\n"
-          " You Cannot be terminated using Ctrl+C or Ctrl+Z...\n"
-          " Wait task ends... press <enter> to continue... \n" );
+	DEBUG ( "\n"
+        	" When start Waf\n"
+        	" You Cannot be terminated using Ctrl+C or Ctrl+Z...\n"
+        	" Wait task ends... press <enter> to continue... \n" );
 
-  getchar();
+	getchar();
 
-  // FIXME: Unecessary to flush stdout. Final '\n' will do.
-  fflush ( stdout );
+	fflush ( stdout );
 }
 
-void no_write_coredump ( void )
+
+void no_write_coredump (void) 
 {
-  struct rlimit rlim;
-
-  rlim.rlim_cur = 0;
-  rlim.rlim_max = 0;
-  setrlimit ( RLIMIT_CORE, &rlim );
+  	struct rlimit rlim;
+   
+	rlim.rlim_cur = 0; 
+	rlim.rlim_max = 0; 
+	setrlimit(RLIMIT_CORE, &rlim);
 
 }
 
-void load_signal_alarm ( void )
+void load_signal_alarm (void)
 {
-  static const int signals[] = { SIGINT, SIGTSTP, SIGQUIT, 0 };
-  const int *p;
+ 	struct sigaction sigIntHandler;
 
-  struct sigaction sigIntHandler =
-  { .sa_handler = ( void (*)(int) )No_Pause_Waf };
+   	sigIntHandler.sa_handler = (void (*)(int))No_Pause_Waf;
+   	sigemptyset(&sigIntHandler.sa_mask);
+   	sigIntHandler.sa_flags = 0;
 
-  if ( sigemptyset ( &sigIntHandler.sa_mask ) )
-  {
-    DEBUG ( "Error at signal" );
-    exit (0);   
-  }
+	if(sigemptyset(&sigIntHandler.sa_mask)!=0)
+	{
+		DEBUG("Error at signal");
+		exit(1);
+	}
 
-  p = signals;
-  while ( *p )
-  {
-    if ( sigaction ( *p, &sigIntHandler, NULL ) )
-    {
-      DEBUG ( "Error at signal" );
-      exit (0);   
-    }
+   	if(sigaction(SIGINT, &sigIntHandler, NULL)!=0)
+	{
+		DEBUG("Error at signal");
+		exit(1);
+	}
 
-    p++;
-  }
+   	if(sigaction(SIGTSTP, &sigIntHandler, NULL)!=0)
+	{
+		DEBUG("Error at signal");
+		exit(1);
+	}
+
+   	if(sigaction(SIGQUIT, &sigIntHandler, NULL)!=0)
+	{
+		DEBUG("Error at signal");
+		exit(1);
+	}
+
 }
+
 
 char from_hex ( char ch )
 {
-  return isdigit ( ch ) ? ch - '0' : tolower ( ch ) - 'a' + 10;
+	return isdigit ( ch ) ? ch - '0' : tolower ( ch ) - 'a' + 10;
 }
 
 
@@ -79,45 +87,44 @@ char from_hex ( char ch )
 
 char *urldecode ( char *str, int size )
 {
-  char *pstr = str, *buf = xmalloc ( size + 1 ), *pbuf = buf;
+	char *pstr = str, *buf = xmalloc ( size + 1 ), *pbuf = buf;
 
-  while ( *pstr )
-  {
-    if ( *pstr == '%' )
-    {
-      if ( pstr[1] && pstr[2] )
-      {
-        *pbuf++ = from_hex ( pstr[1] ) << 4 | from_hex ( pstr[2] );
-        pstr += 2;
-      }
-    }
-    else if ( *pstr == '+' )
-      *pbuf++ = ' ';
+	while ( *pstr )
+	{
+		if ( *pstr == '%' )
+    		{
+      			if ( pstr[1] && pstr[2] )
+      			{
+        			*pbuf++ = from_hex ( pstr[1] ) << 4 | from_hex ( pstr[2] );
+        			pstr += 2;
+      			}
+   	 	}
+    		else if ( *pstr == '+' )
+      			*pbuf++ = ' ';
+    		else
+      			*pbuf++ = *pstr;
 
-    else
-      *pbuf++ = *pstr;
+    		pstr++;
+  	}
 
-    pstr++;
-  }
+  	*pbuf = '\0';
 
-  *pbuf = '\0';
-
-  return buf;
+  	return buf;
 }
 
 
 // remove all blank space ' ' from string
 char *deadspace ( char *str )
 {
-  char *out = str, *put = str;
+	char *out = str, *put = str;
 
-  for ( ; *str ; ++str )
-    if ( *str != ' ' )
-      *put++ = *str;
+	for ( ; *str ; ++str )
+		if ( *str != ' ' )
+			*put++ = *str;
 
-  *put = 0;
+  	*put = 0;
 
-  return out;
+  	return out;
 }
 
 
