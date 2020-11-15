@@ -4,6 +4,12 @@ OctopusWAF is a open source Web application firewall, is made in C language uses
 
 ![Alt text](https://github.com/CoolerVoid/OctopusWAF/blob/main/doc/octopuswaf2.png)
 
+Video demo
+---
+https://www.youtube.com/watch?v=qbnis-i7EqU
+Test detection with libinjection...
+
+
 First step
 ---
 
