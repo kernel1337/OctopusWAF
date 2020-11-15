@@ -1,23 +1,25 @@
 #include "server.h"
 
 // todo use in future
-void LoadCertificates(SSL_CTX* ctx, char* CertFile, char* KeyFile)
+void 
+LoadCertificates (SSL_CTX* ctx, char* CertFile, char* KeyFile)
 {
     /* set the local certificate from CertFile */
-    if ( SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0 )
-	    die("error in load cert");
+	if ( SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0 )
+		die("error in load cert");
     /* set the private key from KeyFile (may be the same as CertFile) */
-    if ( SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0 )
-	    die("error in load private key");
+	if ( SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0 )
+		die("error in load private key");
     /* verify private key */
-    if ( !SSL_CTX_check_private_key(ctx) )
-	    die("error in cert check");
+	if ( !SSL_CTX_check_private_key(ctx) )
+		die("error in cert check");
 }
 
 
-void start_octopus_server(void)
+void 
+start_octopus_server (void)
 {
-	int socklen=0;
+	int socklen = 0;
 	int use_ssl = 1;
 	struct evconnlistener *listener;
 //	SSL_CTX *ssl_ctx = NULL;

@@ -25,7 +25,8 @@
  * will be copied.  Always NUL terminates (unless siz == 0).
  * Returns strlen(src); if retval >= siz, truncation occurred.
  */
-size_t strlcpy(char *dst, const char *src, size_t siz)
+size_t 
+strlcpy (char *dst, const char *src, size_t siz)
 {
 	char *d = dst;
 	const char *s = src;
@@ -50,7 +51,7 @@ size_t strlcpy(char *dst, const char *src, size_t siz)
 			;
 	}
 
-	return(s - src - 1);	/* count does not include NUL */
+	return (s - src - 1);	/* count does not include NUL */
 }
 
 /*
@@ -60,7 +61,8 @@ size_t strlcpy(char *dst, const char *src, size_t siz)
  * Returns strlen(src) + MIN(siz, strlen(initial dst)).
  * If retval >= siz, truncation occurred.
  */
-size_t strlcat(char *dst, const char *src, size_t siz)
+size_t 
+strlcat (char *dst, const char *src, size_t siz)
 {
 	register char *d = dst;
 	register const char *s = src;
@@ -128,29 +130,36 @@ size_t strlcat(char *dst, const char *src, size_t siz)
  * first slen characters of s.
  */
 char *
-strnstr(const char *s, const char *find, size_t slen)
+strnstr (const char *s, const char *find, size_t slen)
 {
 	char c, sc;
 	size_t len;
 
-	if ((c = *find++) != '\0') {
+	if ((c = *find++) != '\0') 
+	{
 		len = strlen(find);
+
 		do {
 			do {
 				if (slen-- < 1 || (sc = *s++) == '\0')
 					return (NULL);
 			} while (sc != c);
+
 			if (len > slen)
 				return (NULL);
+
 		} while (strncmp(s, find, len) != 0);
+
 		s--;
 	}
+
 	return ((char *)s);
 }
 
 
 //custom func 
-char *xstrndup(const char *s, size_t n)
+char *
+xstrndup (const char *s, size_t n)
 {
 	char* new = xmalloc(n+1);
 

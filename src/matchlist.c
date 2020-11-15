@@ -11,13 +11,14 @@ if true returns matched string
 */
 
 
-char *matchlist(char *input,int input_len, short option_algorithm)
+char *
+matchlist (char *input,int input_len, short option_algorithm)
 {
 	FILE * arq;
-	bool at_list=false;
-	int line_len=0;
+	bool at_list = false;
+	int line_len = 0;
 
-	if(option_algorithm==4)	
+	if (option_algorithm==4)	
 		arq = fopen("config/regex_rules.txt", "r"); // if user choice regex need to use regex list
 	else
 		arq = fopen("config/match_list_request.txt", "r");
@@ -36,34 +37,34 @@ char *matchlist(char *input,int input_len, short option_algorithm)
 
 	while( fgets(line,sizeof(line),arq) && at_list==false )
 	{
-		line_len=strnlen(line,1023);		
-		line[line_len+1]='\0';	
+		line_len = strnlen(line,1023);		
+		line[line_len+1] = '\0';	
 
 // remove \n\0 etc... sub -2 at line_len
-		if(line_len>4)		
-			switch(option_algorithm)
+		if (line_len>4)		
+			switch (option_algorithm)
 			{
 				case 1:
-				at_list=DFA_Search(line,line_len-2, input, input_len);
+				at_list = DFA_Search(line,line_len-2, input, input_len);
 				break;
 
 				case 2:
-				at_list=horspool_search(input,input_len, line, line_len-2);
+				at_list = horspool_search(input,input_len, line, line_len-2);
 				break;
 			
 				case 3:
-				at_list=Rabin_Karp_search(input, input_len, line, line_len-2);
+				at_list = Rabin_Karp_search(input, input_len, line, line_len-2);
 				break;
  	
 				case 4:
-				at_list=pcre_regex_search(input, input_len, line);
+				at_list = pcre_regex_search(input, input_len, line);
 				break; 
 			}
 
 		burn_mem(line,0,1023);
 	}
 
-	if( fclose(arq) == EOF )
+	if (fclose(arq) == EOF)
 	{
 		DEBUG("Error in close() file config/matchlist_ip.txt ");
 		exit(0);
@@ -71,9 +72,9 @@ char *matchlist(char *input,int input_len, short option_algorithm)
 		
 	arq=NULL;
 
-	if(at_list==true) 
+	if (at_list==true) 
 	{
-		char *tmp=xstrndup(line,1023);
+		char *tmp = xstrndup(line,1023);
 		return tmp;
 	} else
 		return NULL;

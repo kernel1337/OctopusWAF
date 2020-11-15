@@ -1,7 +1,8 @@
 #include "proxy.h"
 
 
-char *addr_2_str(struct sockaddr *res)
+char *
+addr_2_str (struct sockaddr *res)
 {
 	char *s = NULL;
 
@@ -27,7 +28,8 @@ char *addr_2_str(struct sockaddr *res)
 }
 
 // blockmsg
-void block_msg(struct bufferevent *bev)
+void 
+block_msg (struct bufferevent *bev)
 {
 	/* hide msg error to gain performance
 	char *block_msg=
@@ -48,13 +50,14 @@ void block_msg(struct bufferevent *bev)
 
 // jack the ripper function 
 // func to split request in chunks, util because a lot functions cannot match request buffer in full mode
-bool split_and_check(char * input,  bool (*lambda)(char *argvs))
+bool 
+split_and_check (char * input,  bool (*lambda)(char *argvs))
 {
 	bool test=false;
 	char *delim = "\n";
 	char *ptr = strtok(input, delim);
 
-	while(ptr != NULL && test != true)
+	while (ptr != NULL && test != true)
 	{
 		test=lambda(ptr);
 		ptr = strtok(NULL, delim);
@@ -65,7 +68,8 @@ bool split_and_check(char * input,  bool (*lambda)(char *argvs))
 }
 
 // detect sqli using libinjection
-bool libinjection_test_sqli(char * in)
+bool 
+libinjection_test_sqli (char * in)
 {
 	struct libinjection_sqli_state state;
 	int issqli;
@@ -86,7 +90,7 @@ bool libinjection_test_sqli(char * in)
 
 
 // if return true, blocks...
-bool filter_check(struct bufferevent *bev)
+bool filter_check (struct bufferevent *bev)
 {
 	struct evbuffer *input = bufferevent_get_input(bev); 
  
@@ -99,27 +103,27 @@ bool filter_check(struct bufferevent *bev)
 
 	char *tmpbuf=urldecode(data,strlen(data));
 
-		if(is_request(tmpbuf))
+		if (is_request(tmpbuf))
 		{
-			if(param.option_algorithm)
+			if (param.option_algorithm)
 			{
-				char *match_string=matchlist(tmpbuf,strlen(tmpbuf), param.option_algorithm);
+				char *match_string = matchlist(tmpbuf,strlen(tmpbuf), param.option_algorithm);
 
-				if(match_string != NULL)
+				if (match_string != NULL)
 				{
-					test=true;
+					test = true;
 
-					if(param.debug==true)
+					if (param.debug==true)
 						printf("input: %s\n", data);
 				}
 			}
 
-			if(param.libinjection_sqli==true)
-				if(split_and_check(tmpbuf,libinjection_test_sqli)==true)
+			if (param.libinjection_sqli==true)
+				if (split_and_check(tmpbuf,libinjection_test_sqli)==true)
 				{
 					test=true;
 
-					if(param.debug==true)
+					if (param.debug==true)
 						printf("input: %s\n", data);
 				}
 		}
@@ -131,7 +135,8 @@ bool filter_check(struct bufferevent *bev)
 }
 
 
-void readcb(struct bufferevent *bev, void *ctx)
+void 
+readcb (struct bufferevent *bev, void *ctx)
 {
 	struct bufferevent *partner = ctx;
 	struct evbuffer *src, *dst;
@@ -145,11 +150,11 @@ void readcb(struct bufferevent *bev, void *ctx)
 			return;
 		}
 
-		if(filter_check(bev)==true)
+		if (filter_check(bev)==true)
 		{
 			block_msg(bev);
 
-			if(param.debug==true)
+			if (param.debug==true)
 			{
 				printf("\n%s---===DETECT ATTACK HERE!===---\n%s",RED,LAST);
 				printf("%s███████████████████████████████████\n%s",RED,LAST);
@@ -170,7 +175,8 @@ void readcb(struct bufferevent *bev, void *ctx)
 }
 
 // func from libevent examples
-void drained_writecb(struct bufferevent *bev, void *ctx)
+void 
+drained_writecb (struct bufferevent *bev, void *ctx)
 {
 	struct bufferevent *partner = ctx;
 
@@ -179,21 +185,23 @@ void drained_writecb(struct bufferevent *bev, void *ctx)
 	bufferevent_setcb(bev, readcb, NULL, eventcb, partner);
 	bufferevent_setwatermark(bev, EV_WRITE, 0, 0);
 
-		if(partner)
+		if (partner)
 			bufferevent_enable(partner, EV_READ);
 }
 
-void close_on_finished_writecb(struct bufferevent *bev, void *ctx)
+void 
+close_on_finished_writecb(struct bufferevent *bev, void *ctx)
 {
 	struct evbuffer *b = bufferevent_get_output(bev);
 
-		if(evbuffer_get_length(b) == 0) 
+		if (evbuffer_get_length(b) == 0) 
 			bufferevent_free(bev);
 	
 }
 
 //func from libevent examples
-void eventcb(struct bufferevent *bev, short what, void *ctx)
+void 
+eventcb (struct bufferevent *bev, short what, void *ctx)
 {
 	struct bufferevent *partner = ctx;
 
@@ -242,7 +250,8 @@ void eventcb(struct bufferevent *bev, short what, void *ctx)
 	}
 }
 
-void accept_cb(struct evconnlistener *listener, evutil_socket_t fd,
+void 
+accept_cb (struct evconnlistener *listener, evutil_socket_t fd,
     struct sockaddr *a, int slen, void *p)
 {
 	int use_wrapper = 1;
@@ -289,11 +298,11 @@ void accept_cb(struct evconnlistener *listener, evutil_socket_t fd,
 	char *addr_ip=addr_2_str(a);
 
 
-	if(param.debug==true)
+	if (param.debug==true)
 		printf("Client ADDR: %s\n",addr_ip);
 
 
-	if(blocklist_ip(addr_ip)!=true)
+	if (blocklist_ip(addr_ip)!=true)
 	{
 		bufferevent_setcb(b_in, readcb, NULL, eventcb, b_out);
 		bufferevent_setcb(b_out, readcb, NULL, eventcb, b_in);

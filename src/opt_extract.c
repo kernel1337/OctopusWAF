@@ -1,7 +1,8 @@
 #include "opt_extract.h"
 
 
-void init_banner_octopus(void)
+void 
+init_banner_octopus (void)
 {
 	puts(
 		GREEN
@@ -69,7 +70,8 @@ void init_banner_octopus(void)
   	);
 }
 
-void option_banner_octopus(void)
+void 
+option_banner_octopus (void)
 {
 	puts(
 		"\tOptions argv:\n"
@@ -89,12 +91,13 @@ void option_banner_octopus(void)
  	);
 }
 
-void parser_opts(int argc, char **argv)
+void 
+parser_opts (int argc, char **argv)
 {
 
  	char c;
 
-	short options_match=0;
+	short options_match = 0;
 
 
 	if (argc < 6)
@@ -117,11 +120,11 @@ void parser_opts(int argc, char **argv)
 	};
 
 
-	opterr=0;
+	opterr = 0;
 
 
- 	while((c = getopt_long(argc, argv, "h:r:d:m:l:",long_options,NULL)) != -1)
-  		switch(c) 
+ 	while ((c = getopt_long(argc, argv, "h:r:d:m:l:",long_options,NULL)) != -1)
+  		switch (c) 
   		{
 // host
 			case 'h':
@@ -146,7 +149,7 @@ void parser_opts(int argc, char **argv)
 
 
 			case 'd':
-					param.debug=true;
+					param.debug = true;
 					printf("%s DEBUG mode ON! %s\n",YELLOW,LAST);
 			break;
 
@@ -158,22 +161,22 @@ void parser_opts(int argc, char **argv)
 					burn_mem(algorithm,0,11);	
 					strlcpy(algorithm,optarg,11);
 
-					if(strnstr(algorithm,"dfa",3))
-						options_match=1;
+					if (strnstr(algorithm,"dfa",3))
+						options_match = 1;
 
-					if(strnstr(algorithm,"horspool",8))
-						options_match=2;
+					if (strnstr(algorithm,"horspool",8))
+						options_match = 2;
 
-					if(strnstr(algorithm,"karp-rabin",10))
-						options_match=3;
+					if (strnstr(algorithm,"karp-rabin",10))
+						options_match = 3;
 
-					if(strnstr(algorithm,"pcre",4))
-						options_match=4;
+					if (strnstr(algorithm,"pcre",4))
+						options_match = 4;
 
-					if(options_match==0)
+					if (options_match==0)
 						die("need match argv example --match dfa");
 
-					param.option_algorithm=options_match;					
+					param.option_algorithm = options_match;					
 				} else {
 					die("Error at param Log");
 				}
@@ -181,12 +184,12 @@ void parser_opts(int argc, char **argv)
 
 
 			case 'l':
-					param.libinjection_sqli=true;
+					param.libinjection_sqli = true;
 					printf("%s libinjection enable ! %s\n",GREEN,LAST);
 			break;
 
 			case '?':
-    				if(optopt == 'h' || optopt == 'r' || optopt == 'm') 
+    				if (optopt == 'h' || optopt == 'r' || optopt == 'm') 
     				{
      					init_banner_octopus();
 					option_banner_octopus();

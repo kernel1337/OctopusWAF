@@ -13,11 +13,13 @@
 #include "opt_extract.h"
 #include "server.h"
 
+// todo use this in future for TLS
 const char *ssl_certchain = "cert/certkey.pem";
 const char *ssl_privatekey = "cert/privateKey.key";
 
 
-int main(int argc, char **argv)
+int 
+main(int argc, char **argv)
 {
 	no_write_coredump(); 
 	load_signal_alarm();

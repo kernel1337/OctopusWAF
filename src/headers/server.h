@@ -1,5 +1,5 @@
-#ifndef __SERVER_H__
-#define __SERVER_H__
+#ifndef SERVER_H__
+#define SERVER_H__
 
 
 #include <stdio.h>
@@ -21,10 +21,10 @@
 #include "opt_extract.h"
 
 // todo iumprove that before to use
-void LoadCertificates(SSL_CTX* ctx, char* CertFile, char* KeyFile);
+void LoadCertificates (SSL_CTX* ctx, char* CertFile, char* KeyFile);
 
 //static SSL_CTX *ssl_ctx = NULL;
-void start_octopus_server(void);
+void start_octopus_server (void);
 
 
 #endif

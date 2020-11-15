@@ -4,7 +4,8 @@
 
 
 // based in OpenBSD reallocarray() function http://man.openbsd.org/reallocarray.3
-void *xallocaarray (size_t nmemb, size_t size) 
+void *
+xallocaarray (size_t nmemb, size_t size) 
 {
 	if ((nmemb >= MUL_NO_OVERFLOW || size >= MUL_NO_OVERFLOW) && nmemb > 0 && SIZE_MAX / nmemb < size) 
 		die("integer overflow block");
@@ -24,7 +25,8 @@ void *xallocaarray (size_t nmemb, size_t size)
 }
 
 // based in OpenBSD reallocarray() function http://man.openbsd.org/reallocarray.3
-void *xmallocarray (size_t nmemb, size_t size) 
+void *
+xmallocarray (size_t nmemb, size_t size) 
 {
 	if ((nmemb >= MUL_NO_OVERFLOW || size >= MUL_NO_OVERFLOW) && nmemb > 0 && SIZE_MAX / nmemb < size) 
 		die("integer overflow block");
@@ -37,13 +39,16 @@ void *xmallocarray (size_t nmemb, size_t size)
 	return ptr;
 }
 
-static void *xmalloc_fatal(size_t size) 
+static void *
+xmalloc_fatal (size_t size) 
 {
 	DEBUG("\n Size dbg: %lu\n",size);
 	DIE("Memory FAILURE!");	
 }
 
-void *xmalloc (size_t size) 
+
+void *
+xmalloc (size_t size) 
 {
 	void *ptr = malloc (size);
 
@@ -53,7 +58,8 @@ void *xmalloc (size_t size)
 	return ptr;
 }
 
-void *xcalloc (size_t mem, size_t size) 
+void *
+xcalloc (size_t mem, size_t size) 
 {
 	void *ptr = calloc (mem, size);
 
@@ -63,7 +69,8 @@ void *xcalloc (size_t mem, size_t size)
 	return ptr;
 }
 
-void *xrealloc (void *ptr, size_t size) 
+void *
+xrealloc (void *ptr, size_t size) 
 {
 	void *p = realloc (ptr, size);
 
@@ -73,10 +80,12 @@ void *xrealloc (void *ptr, size_t size)
 	return p;
 }
 
-void xfree(void **ptr) 
+void 
+xfree (void **ptr) 
 {
 	assert(ptr);
-	if( ptr != NULL )
+
+	if ( ptr != NULL )
         {
 		free(*ptr);
 		*ptr=NULL;	
@@ -85,44 +94,48 @@ void xfree(void **ptr)
 }
 
    
-volatile void *burn_mem(volatile void *dst, int c, size_t len) 
+volatile void *
+burn_mem(volatile void *dst, int c, size_t len) 
 {
 	volatile char *buf;
    
-	for(buf = (volatile char *)dst;  len;  buf[--len] = c);
+	for (buf = (volatile char *)dst;  len;  buf[--len] = c);
 
 	return dst;
 }
-   
-volatile void *burn_memcpy(volatile void *dst, volatile void *src, size_t len) 
+
+
+volatile void *
+burn_memcpy(volatile void *dst, volatile void *src, size_t len) 
 {
 	volatile char *cdst, *csrc;
    
-	cdst=(volatile char *)dst;
-	csrc=(volatile char *)src;
+	cdst = (volatile char *)dst;
+	csrc = (volatile char *)src;
 
-	while(len--) 
+	while (len--) 
 		cdst[len] = csrc[len];
 
   	return dst;
 }
    
-volatile void *burn_memmove(volatile void *dst, volatile void *src, size_t len) 
+volatile void *
+burn_memmove(volatile void *dst, volatile void *src, size_t len) 
 {
-	size_t i=0;
+	size_t i = 0;
 	volatile char *cdst, *csrc;
    
-	cdst=(volatile char *)dst;
-	csrc=(volatile char *)src;
+	cdst = (volatile char *)dst;
+	csrc = (volatile char *)src;
 
-	if(csrc > cdst && csrc < cdst + len)
-		while(i < len)
+	if (csrc > cdst && csrc < cdst + len)
+		while (i < len)
 		{ 
 			cdst[i] = csrc[i];
 			i++;
 		}
   	else
-   		while(len--) 
+   		while (len--) 
 			cdst[len] = csrc[len];
 
   	return dst;

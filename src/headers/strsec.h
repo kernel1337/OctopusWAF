@@ -1,3 +1,6 @@
+#ifndef STRSEC_H__
+#define STRSEC_H__
+
 #include <sys/types.h>
 #include <string.h>
 #include <limits.h>
@@ -25,8 +28,8 @@
 #if !defined(__FreeBSD__) && !defined(__OpenBSD__) && !defined(__NetBSD__) && \
     !defined(__bsdi__) && !defined(__APPLE__)
 
-size_t strlcpy(char *dst, const char *src, size_t siz);
-size_t strlcat(char *dst, const char *src, size_t siz);
+size_t strlcpy (char *dst, const char *src, size_t siz);
+size_t strlcat (char *dst, const char *src, size_t siz);
 
 
 /*-
@@ -61,11 +64,12 @@ size_t strlcat(char *dst, const char *src, size_t siz);
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
-char *strnstr(const char *s, const char *find, size_t slen);
-
-
-char *xstrndup(const char *s, size_t n);
+char *strnstr (const char *s, const char *find, size_t slen);
 
 
 #endif /* ! __*BSD__ */
 
+char *xstrndup (const char *s, size_t n);
+
+
+#endif
