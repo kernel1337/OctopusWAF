@@ -23,7 +23,7 @@ blocklist_ip (char * addr)
 	while (fgets(line,sizeof line,arq) && at_list==false)
 	{    
 		if (strnstr(line,addr,128))
-			at_list=true;
+			at_list = true;
 	}
 
 	if (fclose(arq) == EOF)

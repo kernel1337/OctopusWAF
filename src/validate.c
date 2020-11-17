@@ -23,28 +23,29 @@ is_request (char *ptr)
 	if (ptr == NULL)
 		return false;
 
-	if (ptr[0]==' ')
+	if (ptr[0] == ' ')
 		return false;
 
-	if (ptr[1]==' ')
+	if (ptr[1] == ' ')
 		return false;
 
 	if (strnlen(ptr,12) < 10)
 		return false;
 
+	assert(ptr);
 // is GET ?
- 	if (ptr[0]=='G' && ptr[1]=='E' && ptr[2]=='T')
+ 	if (memcmp(ptr, "GET",3) == 0)
 		return true;
 
 // is POST ?
- 	if (ptr[0]=='P' && ptr[1]=='O' && ptr[2]=='S' && ptr[3]=='T')
+ 	if (memcmp(ptr, "POST",4) == 0)
 		return true;
 
 // is PUT ?
- 	if (ptr[0]=='P' && ptr[1]=='U' && ptr[2]=='T')
+ 	if (memcmp(ptr, "PUT",3) == 0)
 		return true;
 // is DELETE ?
- 	if (ptr[0]=='D' && ptr[1]=='E' && ptr[2]=='L' && ptr[3]=='E' && ptr[4]=='T' && ptr[5]=='E')
+ 	if (memcmp(ptr, "DELETE",6) == 0)
 		return true;
 
 	return false;

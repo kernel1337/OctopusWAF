@@ -79,7 +79,8 @@ option_banner_octopus (void)
 		"\t--redirect or -r : port to redirect HTTP or https \n"
 		"\t--debug : Write log in console \n"
 		"\t--libinjection-sqli : Load libinjection to detect SQL injection in requests\n"
-		"\t--match or -m : match algorithm you can choice (dfa, horspool,pcre(regex) or karp-rabin), example --match pcre \n\n\tNotes:\n"
+		"\t--pcre : Load PCRE module to find rules by regex\n"
+		"\t--match or -m : match algorithm you can choice (dfa, horspool or karp-rabin), example --match horspool \n\n\tNotes:\n"
 		"\tConfig Blocklist in config/blocklist_ip.txt\n"	
 		"\tConfig list rule of matchs at config/match_list.txt\n"
 		"\tConfig list rules of regex matchs using PCRE at config/regex_rules.txt\n"
@@ -116,6 +117,7 @@ parser_opts (int argc, char **argv)
  		{"debug", no_argument, NULL, 'd'}, 
  		{"match", required_argument, NULL, 'm'}, 
 		{"libinjection-sqli", no_argument, NULL, 'l'},
+		{"pcre", no_argument, NULL, 'p'},
 		{NULL, 0, NULL, 0}
 	};
 
@@ -123,12 +125,12 @@ parser_opts (int argc, char **argv)
 	opterr = 0;
 
 
- 	while ((c = getopt_long(argc, argv, "h:r:d:m:l:",long_options,NULL)) != -1)
+ 	while ((c = getopt_long(argc, argv, "h:r:d:m:l:p:",long_options,NULL)) != -1)
   		switch (c) 
   		{
 // host
 			case 'h':
-				if ( strnlen(optarg,65)<= 64 )
+				if ( strnlen(optarg,65) <= 64 )
 				{
 					burn_mem(param.hostarg,0,127); // preserve 1buyte to canary
 					strlcpy(param.hostarg,optarg,128);	
@@ -138,7 +140,7 @@ parser_opts (int argc, char **argv)
 			break;
 
 			case 'r':
-				if ( strnlen(optarg,65)<= 64 )
+				if ( strnlen(optarg,65) <= 64 )
 				{
 					burn_mem(param.redirectarg,0,127); // stack cookie preserve
 					strlcpy(param.redirectarg,optarg,128);	
@@ -154,7 +156,7 @@ parser_opts (int argc, char **argv)
 			break;
 
 			case 'm':
-				if ( strnlen(optarg,12)<= 11 )
+				if ( strnlen(optarg,12) <= 11 )
 				{
 					char algorithm[12];
 
@@ -170,10 +172,7 @@ parser_opts (int argc, char **argv)
 					if (strnstr(algorithm,"karp-rabin",10))
 						options_match = 3;
 
-					if (strnstr(algorithm,"pcre",4))
-						options_match = 4;
-
-					if (options_match==0)
+					if (options_match == 0)
 						die("need match argv example --match dfa");
 
 					param.option_algorithm = options_match;					
@@ -186,6 +185,11 @@ parser_opts (int argc, char **argv)
 			case 'l':
 					param.libinjection_sqli = true;
 					printf("%s libinjection enable ! %s\n",GREEN,LAST);
+			break;
+
+			case 'p':
+					param.pcre = true;
+					printf("%s PCRE search using regex enable ! %s\n",GREEN,LAST);
 			break;
 
 			case '?':

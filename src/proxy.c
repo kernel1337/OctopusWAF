@@ -32,7 +32,8 @@ void
 block_msg (struct bufferevent *bev)
 {
 	/* hide msg error to gain performance
-	char *block_msg=
+       */
+   	   char *block_msg=
 			"HTTP/1.1 404 Not Found\r\n"
 			"Content-type: text/html\r\n"
 			"\r\n"
@@ -43,8 +44,8 @@ block_msg (struct bufferevent *bev)
 			" </body>\r\n"
 			"</html>\r\n";
 	bufferevent_write(bev, block_msg, strlen(block_msg));
-	*/
-	bufferevent_free(bev);
+	
+	//bufferevent_free(bev);
 }
 
 
@@ -53,13 +54,13 @@ block_msg (struct bufferevent *bev)
 bool 
 split_and_check (char * input,  bool (*lambda)(char *argvs))
 {
-	bool test=false;
+	bool test = false;
 	char *delim = "\n";
 	char *ptr = strtok(input, delim);
 
 	while (ptr != NULL && test != true)
 	{
-		test=lambda(ptr);
+		test = lambda(ptr);
 		ptr = strtok(NULL, delim);
 	}
 
@@ -95,13 +96,13 @@ bool filter_check (struct bufferevent *bev)
 	struct evbuffer *input = bufferevent_get_input(bev); 
  
 	size_t len = evbuffer_get_length(input);
-	char *data=NULL;
-	bool test=false;
+	char *data = NULL;
+	bool test = false;
 
 	data = xmalloc(len);
 	evbuffer_copyout(input, data, len);
 
-	char *tmpbuf=urldecode(data,strlen(data));
+	char *tmpbuf = urldecode(data,strlen(data));
 
 		if (is_request(tmpbuf))
 		{
@@ -113,19 +114,33 @@ bool filter_check (struct bufferevent *bev)
 				{
 					test = true;
 
-					if (param.debug==true)
+					if (param.debug == true)
 						printf("input: %s\n", data);
 				}
 			}
 
-			if (param.libinjection_sqli==true)
+			if (param.libinjection_sqli == true)
 				if (split_and_check(tmpbuf,libinjection_test_sqli)==true)
 				{
-					test=true;
+					test = true;
 
-					if (param.debug==true)
-						printf("input: %s\n", data);
+					if (param.debug == true)
+						printf("%s Libinjection input: %s %s\n",GREEN,LAST, data);
 				}
+
+
+			if (param.pcre == true)
+			{	
+				char *match_string = matchlist(tmpbuf,strlen(tmpbuf), 4);
+
+				if (match_string != NULL)
+				{
+					test = true;
+
+					if (param.debug == true)
+						printf("%s PCRE match input: %s %s\n", YELLOW,LAST,data );
+				}
+			}
 		}
 
 	free(data);
@@ -295,14 +310,14 @@ accept_cb (struct evconnlistener *listener, evutil_socket_t fd,
 	}
 
 
-	char *addr_ip=addr_2_str(a);
+	char *addr_ip = addr_2_str(a);
 
 
 	if (param.debug==true)
 		printf("Client ADDR: %s\n",addr_ip);
 
 
-	if (blocklist_ip(addr_ip)!=true)
+	if (blocklist_ip(addr_ip) != true)
 	{
 		bufferevent_setcb(b_in, readcb, NULL, eventcb, b_out);
 		bufferevent_setcb(b_out, readcb, NULL, eventcb, b_in);

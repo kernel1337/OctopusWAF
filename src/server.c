@@ -36,12 +36,12 @@ start_octopus_server (void)
 	socklen = sizeof(listen_on_addr);
 
 	if (evutil_parse_sockaddr_port(param.hostarg,
-		(struct sockaddr*)&listen_on_addr, &socklen)<0) 
+		(struct sockaddr*)&listen_on_addr, &socklen) < 0) 
 	{
-		int p = atoi(param.hostarg);
+		unsigned short p = atoi(param.hostarg);
 		struct sockaddr_in *sin = (struct sockaddr_in*)&listen_on_addr;
 
-		if (p < 1 || p > 65535)
+		if (p < 1)
 			die("Port is not ok");
 		
 
@@ -52,7 +52,9 @@ start_octopus_server (void)
 
 			sin->sin_port = ntohs( sin->sin_port);
 			sin->sin_addr.s_addr  =  htonl(0x7f000001); //&((struct sockaddr_in*)&sin)->sin_addr;
+
 		} else if (sin->sin_family  == AF_INET6) {
+
 			struct sockaddr_in6 *sin6=(struct sockaddr_in6*)&sin;
 			sin->sin_port  = ntohs( sin6->sin6_port);
 			sin->sin_addr.s_addr  =  htonl(0x7f000001); //&((struct sockaddr_in6*)&sin)->sin6_addr;
@@ -95,8 +97,9 @@ start_octopus_server (void)
 		ssl_ctx = SSL_CTX_new(TLS_method());
 	}
 
+
 	listener = evconnlistener_new_bind(base, accept_cb, NULL,
-	    LEV_OPT_CLOSE_ON_FREE|LEV_OPT_CLOSE_ON_EXEC|LEV_OPT_REUSEABLE,
+	    LEV_OPT_CLOSE_ON_FREE|LEV_OPT_CLOSE_ON_EXEC|LEV_OPT_REUSEABLE|BEV_OPT_THREADSAFE,
 	    -1, (struct sockaddr*)&listen_on_addr, socklen);
 
 	if (! listener) 

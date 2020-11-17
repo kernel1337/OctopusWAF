@@ -54,25 +54,25 @@ load_signal_alarm (void)
    	sigemptyset(&sigIntHandler.sa_mask);
    	sigIntHandler.sa_flags = 0;
 
-	if (sigemptyset(&sigIntHandler.sa_mask)!=0)
+	if (sigemptyset(&sigIntHandler.sa_mask) != 0)
 	{
 		DEBUG("Error at signal");
 		exit(1);
 	}
 
-   	if (sigaction(SIGINT, &sigIntHandler, NULL)!=0)
+   	if (sigaction(SIGINT, &sigIntHandler, NULL) != 0)
 	{
 		DEBUG("Error at signal");
 		exit(1);
 	}
 
-   	if (sigaction(SIGTSTP, &sigIntHandler, NULL)!=0)
+   	if (sigaction(SIGTSTP, &sigIntHandler, NULL) != 0)
 	{
 		DEBUG("Error at signal");
 		exit(1);
 	}
 
-   	if (sigaction(SIGQUIT, &sigIntHandler, NULL)!=0)
+   	if (sigaction(SIGQUIT, &sigIntHandler, NULL) != 0)
 	{
 		DEBUG("Error at signal");
 		exit(1);

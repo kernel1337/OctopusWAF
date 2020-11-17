@@ -168,10 +168,10 @@ Rabin_Karp_search (char *input, int input_len, char *match, int match_len)
 }
 
 bool 
-pcre_regex_search(const char *string,int string_len,const char *expression)
+pcre_regex_search (const char *string,int string_len,const char *expression)
 {
 	const char *err;
-	int errofs =0, offset = 0;
+	int errofs = 0, offset = 0;
 	int ovector[100];
 
 	pcre *re = pcre_compile(expression, 0, &err, &errofs, NULL);

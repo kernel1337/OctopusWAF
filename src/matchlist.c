@@ -18,7 +18,7 @@ matchlist (char *input,int input_len, short option_algorithm)
 	bool at_list = false;
 	int line_len = 0;
 
-	if (option_algorithm==4)	
+	if (option_algorithm == 4)	
 		arq = fopen("config/regex_rules.txt", "r"); // if user choice regex need to use regex list
 	else
 		arq = fopen("config/match_list_request.txt", "r");
@@ -70,7 +70,7 @@ matchlist (char *input,int input_len, short option_algorithm)
 		exit(0);
 	}
 		
-	arq=NULL;
+	arq = NULL;
 
 	if (at_list==true) 
 	{

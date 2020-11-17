@@ -19,6 +19,7 @@ struct choice  {
 	bool debug;
 	bool libinjection_sqli;
 	bool libinjection_xss;
+	bool pcre;
 	short option_algorithm;
 };
 

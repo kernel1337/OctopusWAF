@@ -10,11 +10,11 @@ xallocaarray (size_t nmemb, size_t size)
 	if ((nmemb >= MUL_NO_OVERFLOW || size >= MUL_NO_OVERFLOW) && nmemb > 0 && SIZE_MAX / nmemb < size) 
 		die("integer overflow block");
 
-	size_t maxmem=nmemb*size;
+	size_t maxmem = nmemb*size;
 
 	char ptr2[maxmem];
 
-	void *ptr=(void *)ptr2;
+	void *ptr = (void *)ptr2;
 
 	if (ptr == NULL)
 		die("error in xallocarray() function");
