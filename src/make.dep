@@ -4,10 +4,10 @@ blocklist.o: blocklist.c headers/blocklist.h headers/mem_ops.h \
  headers/mem_ops.h headers/utils.h headers/strsec.h
 file_ops.o: file_ops.c headers/file_ops.h headers/utils.h \
  headers/mem_ops.h
-match_algorithms.o: match_algorithms.c ../lib/libinjection/libinjection_sqli.c headers/utils.h \
+match_algorithms.o: match_algorithms.c libinjection_sqli.c headers/utils.h \
  headers/match_algorithms.h headers/utils.h \
- ../lib/libinjection/headers/libinjection_sqli.h \
-../lib/libinjection/headers/libinjection.h
+ headers/libinjection_sqli.h \
+headers/libinjection.h
 matchlist.o: matchlist.c headers/mem_ops.h headers/utils.h \
  headers/strsec.h headers/mem_ops.h headers/match_algorithms.h \
  headers/utils.h
