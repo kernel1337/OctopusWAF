@@ -65,7 +65,7 @@ init_banner_octopus (void)
 "                                    ██████████        ██▒▒████\n"
 "                                    ░░░░░░░░░░        ██▓▓░░░░\n"
    		YELLOW
-   		"\n\t OCTOPUS Web application firewall v0.2\n"
+   		"\n\t OCTOPUS Web application firewall v0.3\n"
    		LAST
   	);
 }
