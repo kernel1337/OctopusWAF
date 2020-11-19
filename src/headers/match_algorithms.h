@@ -8,6 +8,11 @@
 #include <stdbool.h>
 #include "utils.h"
 #include <pcre.h>
+
+#include "libinjection.h"
+#include "libinjection_sqli.h"
+
+bool libinjection_test_sqli (char * in);
 // DFA search algorithm
 int NextMachineState (char *pat, int M, int state, int x);
 void write_tf (char *pat, int M, int TF[][256]);

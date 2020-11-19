@@ -1,6 +1,31 @@
 #include "utils.h"
 #include "match_algorithms.h"
- 
+
+
+
+// detect sqli using libinjection
+bool 
+libinjection_test_sqli (char * in)
+{
+	struct libinjection_sqli_state state;
+	int issqli;
+
+	size_t slen = strlen(in);
+
+	libinjection_sqli_init(&state, in, slen, FLAG_NONE);
+	issqli = libinjection_is_sqli(&state);
+
+ 		if (issqli) 
+		{
+        		fprintf(stdout, "sqli detected with fingerprint of '%s'\n", state.fingerprint);
+			return true;
+    		}
+
+	return false;
+}
+
+
+
 int 
 NextMachineState (char *pat, int M, int state, int x)
 {
