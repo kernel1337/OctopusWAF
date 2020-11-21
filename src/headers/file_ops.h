@@ -6,11 +6,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "utils.h"
-//#include "mem_ops.h"
+#include "opt_extract.h"
 
-char *readLine (char * NameFile);
-void WriteFile (char *file,char *str);
-long FileSize (const char *file);
-char *Random_linefile (char * namefile);
+void log_make (char *mode, char *addr_ip, char *data, size_t len_data);
+void write_log (char *str);
 
 #endif

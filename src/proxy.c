@@ -8,18 +8,22 @@ addr_2_str (struct sockaddr *res)
 
 		switch(res->sa_family) 
 		{
-    			case AF_INET: {
+    			case AF_INET: 
+			{
         			struct sockaddr_in *addr_in = (struct sockaddr_in *)res;
         			s = xmalloc(INET_ADDRSTRLEN);
         			inet_ntop(AF_INET, &(addr_in->sin_addr), s, INET_ADDRSTRLEN);
         			break;
-    			}
-    			case AF_INET6: {
+			}
+    			
+    			case AF_INET6:
+			{	
         			struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *)res;
         			s = xmalloc(INET6_ADDRSTRLEN);
         			inet_ntop(AF_INET6, &(addr_in6->sin6_addr), s, INET6_ADDRSTRLEN);
         			break;
-    			}
+			}
+    			
     			default:
         			break;
 		}
@@ -27,12 +31,12 @@ addr_2_str (struct sockaddr *res)
 	return s;
 }
 
-// blockmsg
+// block msg
 void 
 block_msg (struct bufferevent *bev)
 {
-	/* hide msg error to gain performance
-       */
+// Here you can hide msg error to gain performance
+      
    	   char *block_msg=
 			"HTTP/1.1 404 Not Found\r\n"
 			"Content-type: text/html\r\n"
@@ -68,23 +72,44 @@ split_and_check (char * input,  bool (*lambda)(char *argvs))
 
 }
 
+char *
+bufferevent_get_addr(struct bufferevent *bev)
+{
+	struct sockaddr addr;
+        int sock_in = bufferevent_getfd(bev);
+    	socklen_t addr_size = sizeof(struct sockaddr);
+    	int res = getpeername(sock_in, &addr, &addr_size);
+	char *addr_ip = addr_2_str(&addr);
+
+	return addr_ip;
+}
 
 // if return true, blocks...
-bool filter_check (struct bufferevent *bev)
+bool 
+filter_check (struct bufferevent *bev)
 {
 	struct evbuffer *input = bufferevent_get_input(bev); 
- 
 	size_t len = evbuffer_get_length(input);
-	char *data = NULL;
+	char *data = xmalloc(len);
+	char *addr_ip = bufferevent_get_addr(bev);
 	bool test = false;
 
-	data = xmalloc(len);
 	evbuffer_copyout(input, data, len);
 
 	char *tmpbuf = urldecode(data,strlen(data));
 
 		if (is_request(tmpbuf))
 		{
+			if (blocklist_ip(addr_ip) == true)
+			{
+
+				if (param.debug == true)
+					printf("Block per address \nIP addr: %s\n input: %s\n", addr_ip, data);
+					
+				if (param.logfile)
+					log_make("Block per address", addr_ip, " ", 1);
+			}
+
 			if (param.option_algorithm)
 			{
 				char *match_string = matchlist(tmpbuf,strlen(tmpbuf), param.option_algorithm);
@@ -94,7 +119,10 @@ bool filter_check (struct bufferevent *bev)
 					test = true;
 
 					if (param.debug == true)
-						printf("input: %s\n", data);
+						printf("IP addr: %s\n input: %s\n", addr_ip, data);
+					
+					if (param.logfile)
+						log_make("Algorithm match", addr_ip, data, len);
 				}
 			}
 
@@ -104,7 +132,10 @@ bool filter_check (struct bufferevent *bev)
 					test = true;
 
 					if (param.debug == true)
-						printf("%s Libinjection input: %s %s\n",GREEN,LAST, data);
+						printf("%s Libinjection match\n%s IP addr: %s\n input: %s\n",GREEN,LAST, addr_ip, data);
+	
+					if (param.logfile)
+						log_make("Libinejction SQLi match", addr_ip, data, len);
 				}
 
 
@@ -117,12 +148,16 @@ bool filter_check (struct bufferevent *bev)
 					test = true;
 
 					if (param.debug == true)
-						printf("%s PCRE match input: %s %s\n", YELLOW,LAST,data );
+						printf("%s PCRE match\n%s IP addr: %s\ninput: %s\n", YELLOW,LAST, addr_ip, data );
+	
+					if (param.logfile)
+						log_make("Lib PCRE match per regex", addr_ip, data, len);
 				}
 			}
 		}
 
 	free(data);
+	free(addr_ip);
 //	free(tmpbuf);
 
 	return test;
@@ -135,6 +170,7 @@ readcb (struct bufferevent *bev, void *ctx)
 	struct bufferevent *partner = ctx;
 	struct evbuffer *src, *dst;
 	size_t len;
+
 	src = bufferevent_get_input(bev);
 	len = evbuffer_get_length(src);
 
@@ -244,6 +280,7 @@ eventcb (struct bufferevent *bev, short what, void *ctx)
 	}
 }
 
+// following example of libevent
 void 
 accept_cb (struct evconnlistener *listener, evutil_socket_t fd,
     struct sockaddr *a, int slen, void *p)
@@ -288,25 +325,12 @@ accept_cb (struct evconnlistener *listener, evutil_socket_t fd,
 		b_out = b_ssl;
 	}
 
+	bufferevent_setcb(b_in, readcb, NULL, eventcb, b_out);
+	bufferevent_setcb(b_out, readcb, NULL, eventcb, b_in);
 
-	char *addr_ip = addr_2_str(a);
+	bufferevent_enable(b_in, EV_READ|EV_WRITE);
+	bufferevent_enable(b_out, EV_READ|EV_WRITE);
 
-
-	if (param.debug==true)
-		printf("Client ADDR: %s\n",addr_ip);
-
-
-	if (blocklist_ip(addr_ip) != true)
-	{
-		bufferevent_setcb(b_in, readcb, NULL, eventcb, b_out);
-		bufferevent_setcb(b_out, readcb, NULL, eventcb, b_in);
-
-
-		bufferevent_enable(b_in, EV_READ|EV_WRITE);
-		bufferevent_enable(b_out, EV_READ|EV_WRITE);
-	} 
-
-	free(addr_ip);
 
 
 }

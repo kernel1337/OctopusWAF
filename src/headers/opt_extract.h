@@ -16,6 +16,7 @@
 struct choice  {
 	char hostarg[128];
 	char redirectarg[128];
+	char logfile[128];
 	bool debug;
 	bool libinjection_sqli;
 	bool libinjection_xss;

@@ -32,6 +32,7 @@
 #include "opt_extract.h"
 #include "matchlist.h"
 #include "match_algorithms.h"
+#include "file_ops.h"
 
 struct event_base *base;
 struct sockaddr_storage listen_on_addr;
@@ -43,6 +44,7 @@ static SSL_CTX *ssl_ctx = NULL;
 char *addr_2_str (struct sockaddr *res); 
 void block_msg (struct bufferevent *bev);
 bool split_and_check (char * input,  bool (*lambda)(char *argvs));
+char *bufferevent_get_addr(struct bufferevent *bev);
 bool filter_check (struct bufferevent *bev);
 void readcb (struct bufferevent *bev, void *ctx);
 void drained_writecb (struct bufferevent *bev, void *ctx);
