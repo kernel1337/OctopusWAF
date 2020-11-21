@@ -2,7 +2,8 @@
 
 OctopusWAF is a open source Web application firewall, is made in C language uses libevent to make multiple connections.
 
-![Alt text](https://github.com/CoolerVoid/OctopusWAF/blob/main/doc/octopuswaf2.png)
+
+![Alt text](https://github.com/CoolerVoid/OctopusWAF/blob/main/doc/octopus_bannerv04.png)
 
 Video demo
 ---
@@ -13,23 +14,24 @@ Test detection with libinjection...
 First step
 ---
 
-Instal lib-pcre, if you use RPM based distros search pcre-devel package, in BSD based search in ports or brew...
-Need libevent-dev, on RPM distros libevent-devel, Openssl-dev and openssl-devel.
+Install lib-pcre, if you use RPM based distro search the name pcre-devel package, on BSD based search in ports or brew...
+you Need libevent-dev to run, on RPM distros libevent-devel, you need to install Openssl-dev and openssl-devel.
 
-To compile and run OctopusWAF follow this commands:
+To compile and run OctopusWAF, follow this commands:
 ```
 $ git clone https://github.com/CoolerVoid/OctopusWAF
 $ cd OctopusWAF; make
+# if you need see options try this following
 $ bin/OctopusWAF
 
 Example tested on DVWA on simple HTTP channel
 
-$ bin/OctopusWAF -h 127.0.0.1:2006 -r 127.0.0.1:80 -m horspool --debug
+$ bin/OctopusWAF -h 127.0.0.1:7008 -r 127.0.0.1:80 --debug --libinjection-sqli --log results_log.txt
 
-Open your browser in http://127.0.0.1:2006
+Note you can use pcre, horspool and libinjection mode protections in same time...
 
+Open your browser in http://127.0.0.1:7008 and you can test the block when you attack...
 ```
-
 * Notes: Don't execute with "cd bin; ./OctopusWAF" use full path "bin/OctopusWAF", because binary need load content in config directory.
 Use HTTP only for WAF usage, this version 0.1 run TLS but don't have resource to load cert and read TLS requests/responses, if you use TLS the service can lost WAF function and work like reverse proxy.
 
@@ -42,34 +44,27 @@ Code overview
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-C                               12            324            138            997
-C/C++ Header                    11             63             70            212
-make                             1              1              0             30
-Markdown                         1              6              0              3
+C/C++ Header                    14            133            270           9977
+C                               13            591            798           2625
+make                             2             14              3             52
+Markdown                         1             34              0             52
 -------------------------------------------------------------------------------
-SUM:                            25            394            208           1242
+SUM:                            30            772           1071          12706
 -------------------------------------------------------------------------------
 
 ```
 
-TODO:
+Future TODO:
 ---
 Resource to load modsec rules https://github.com/SpiderLabs/owasp-modsecurity-crs/
 
-Insert rules to detect XSS
-
-Insert rules to detect SQLi
-
-Insert rules to detect RCE
-
-Insert rules to detect RFI/LFI
-
-Insert rules to detect XXE
-
-Insert rules to detect Anomalys...
-
+Insert new rules to detect XSS
+Insert new rules to detect SQLi
+Insert new rules to detect RCE
+Insert new rules to detect RFI/LFI
+Insert new rules to detect XXE
+Insert new rules to detect Anomalys...
 Channel for TLS
-
 Cert Load
 
 
