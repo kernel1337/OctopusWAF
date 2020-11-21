@@ -1,6 +1,8 @@
 # Octopus WAF 
 
 OctopusWAF is a open source Web application firewall, is made in C language uses libevent to make multiple connections.
+Event-driven architecture is optimized for a large number of parallel connections (keep-alive) which is important for high performance AJAX applications.
+This tool is very light, you can deploy in any please, this resource turn perfect to protect specific endpoint that need a custom protection.
 
 
 ![Alt text](https://github.com/CoolerVoid/OctopusWAF/blob/main/doc/octopus_bannerv04.png)
@@ -57,7 +59,7 @@ SUM:                            30            772           1071          12706
 Future TODO:
 ---
 Resource to load modsec rules https://github.com/SpiderLabs/owasp-modsecurity-crs/
-
+Resource to use NLP and machine learning (KNN or naive bayes)
 Insert new rules to detect XSS
 Insert new rules to detect SQLi
 Insert new rules to detect RCE
