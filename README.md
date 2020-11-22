@@ -58,16 +58,16 @@ SUM:                            30            772           1071          12706
 
 Future TODO:
 ---
-Resource to load modsec rules https://github.com/SpiderLabs/owasp-modsecurity-crs/
-Resource to use NLP and machine learning (KNN or naive bayes)
-Insert new rules to detect XSS
-Insert new rules to detect SQLi
-Insert new rules to detect RCE
-Insert new rules to detect RFI/LFI
-Insert new rules to detect XXE
-Insert new rules to detect Anomalys...
-Channel for TLS
-Cert Load
+* Resource to load modsec rules https://github.com/SpiderLabs/owasp-modsecurity-crs/
+* Resource to use NLP and try classify payload to block using machine learning (KNN or naive bayes)
+* Insert new rules to detect XSS
+* Insert new rules to detect SQLi
+* Insert new rules to detect RCE
+* Insert new rules to detect RFI/LFI
+* Insert new rules to detect XXE
+* Insert new rules to detect Anomalys...
+* Channel for TLS
+* Cert Load
 
 
 
