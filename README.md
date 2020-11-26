@@ -16,8 +16,14 @@ Test detection with libinjection...
 First step
 ---
 
-Install libpcre or libpcre-dev with apt, if you use RPM based distro search the name pcre-devel package, on BSD based search in ports or brew...
+Install libpcre or libpcre-dev with apt, if you use RPM based distro search the name pcre-devel package, on BSD systems search in ports or brew(MacOS)...
 you Need libevent-dev to run, on RPM distros libevent-devel, you need to install Openssl-dev and openssl-devel.
+
+Example in debian based:
+```
+$ sudo apt install libssl-dev libevent-dev libpcre3-dev make gcc
+```
+
 
 To compile and run OctopusWAF, follow this commands:
 ```
@@ -68,6 +74,7 @@ Future TODO:
 * Insert new rules to detect Anomalys...
 * Channel for TLS
 * Cert Load
+* Issues...
 
 
 
