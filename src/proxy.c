@@ -37,7 +37,7 @@ block_msg (struct bufferevent *bev)
 {
 // Here you can hide msg error to gain performance
       
-   	   char *block_msg=
+	char *block_msg=
 			"HTTP/1.1 404 Not Found\r\n"
 			"Content-type: text/html\r\n"
 			"\r\n"
@@ -62,11 +62,11 @@ split_and_check (char * input,  bool (*lambda)(char *argvs))
 	char *delim = "\n";
 	char *ptr = strtok(input, delim);
 
-	while (ptr != NULL && test != true)
-	{
-		test = lambda(ptr);
-		ptr = strtok(NULL, delim);
-	}
+		while (ptr != NULL && test != true)
+		{
+			test = lambda(ptr);
+			ptr = strtok(NULL, delim);
+		}
 
 	return test;
 
@@ -293,47 +293,45 @@ accept_cb (struct evconnlistener *listener, evutil_socket_t fd,
 
 	b_in = bufferevent_socket_new(base, fd,BEV_OPT_CLOSE_ON_FREE|BEV_OPT_DEFER_CALLBACKS);
 
-	if (!ssl_ctx || use_wrapper)
-		b_out = bufferevent_socket_new(base, -1,BEV_OPT_CLOSE_ON_FREE|BEV_OPT_DEFER_CALLBACKS);
-	else {
-		SSL *ssl = SSL_new(ssl_ctx);
-		b_out = bufferevent_openssl_socket_new(base, -1, ssl,BUFFEREVENT_SSL_CONNECTING,BEV_OPT_CLOSE_ON_FREE|BEV_OPT_DEFER_CALLBACKS);
-	}
+		if (!ssl_ctx || use_wrapper)
+			b_out = bufferevent_socket_new(base, -1,BEV_OPT_CLOSE_ON_FREE|BEV_OPT_DEFER_CALLBACKS);
+		else {
+			SSL *ssl = SSL_new(ssl_ctx);
+			b_out = bufferevent_openssl_socket_new(base, -1, ssl,BUFFEREVENT_SSL_CONNECTING,BEV_OPT_CLOSE_ON_FREE|BEV_OPT_DEFER_CALLBACKS);
+		}
 
 	assert(b_in && b_out && a);
 
-	if (bufferevent_socket_connect(b_out,(struct sockaddr*)&connect_to_addr, connect_to_addrlen)<0) 
-	{
-		perror("bufferevent_socket_connect");
-		bufferevent_free(b_out);
-		bufferevent_free(b_in);
-		return;
-	}
-
-	if (ssl_ctx && use_wrapper) 
-	{
-		struct bufferevent *b_ssl;
-		SSL *ssl = SSL_new(ssl_ctx);
-		b_ssl = bufferevent_openssl_filter_new(base,b_out, ssl, BUFFEREVENT_SSL_CONNECTING,BEV_OPT_CLOSE_ON_FREE|BEV_OPT_DEFER_CALLBACKS);
-
-		if (!b_ssl) 
+		if (bufferevent_socket_connect(b_out,(struct sockaddr*)&connect_to_addr, connect_to_addrlen)<0) 
 		{
-			perror("Bufferevent_openssl_new");
+			perror("bufferevent_socket_connect");
 			bufferevent_free(b_out);
 			bufferevent_free(b_in);
 			return;
 		}
 
-		b_out = b_ssl;
-	}
+		if (ssl_ctx && use_wrapper) 
+		{
+			struct bufferevent *b_ssl;
+			SSL *ssl = SSL_new(ssl_ctx);
+			b_ssl = bufferevent_openssl_filter_new(base,b_out, ssl, BUFFEREVENT_SSL_CONNECTING,BEV_OPT_CLOSE_ON_FREE|BEV_OPT_DEFER_CALLBACKS);
+	
+			if (!b_ssl) 
+			{
+				perror("Bufferevent_openssl_new");
+				bufferevent_free(b_out);
+				bufferevent_free(b_in);
+				return;
+			}
+	
+			b_out = b_ssl;
+		}
 
 	bufferevent_setcb(b_in, readcb, NULL, eventcb, b_out);
 	bufferevent_setcb(b_out, readcb, NULL, eventcb, b_in);
 
 	bufferevent_enable(b_in, EV_READ|EV_WRITE);
 	bufferevent_enable(b_out, EV_READ|EV_WRITE);
-
-
 
 }
 
