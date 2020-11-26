@@ -1,11 +1,11 @@
 # Octopus WAF 
 
+![Alt text](https://github.com/CoolerVoid/OctopusWAF/blob/main/doc/octopus_bannerv04.png)
+
 OctopusWAF is a open source Web application firewall, is made in C language uses libevent to make multiple connections.
+<img align="right" width="240" height="220" src="https://raw.githubusercontent.com/CoolerVoid/OctopusWAF/main/doc/octopus.png">
 Event-driven architecture is optimized for a large number of parallel connections (keep-alive) which is important for high performance AJAX applications.
 This tool is very light, you can deploy in any please, this resource turn perfect to protect specific endpoint that need a custom protection.
-
-
-![Alt text](https://github.com/CoolerVoid/OctopusWAF/blob/main/doc/octopus_bannerv04.png)
 
 Video demo
 ---
