@@ -48,8 +48,8 @@ block_msg (struct bufferevent *bev)
 			" </body>\r\n"
 			"</html>\r\n";
 	bufferevent_write(bev, block_msg, strlen(block_msg));
-	
-	//bufferevent_free(bev);
+	bufferevent_setwatermark(bev, EV_WRITE, MAX_OUTPUT/2, MAX_OUTPUT);
+	bufferevent_disable(bev, EV_READ);
 }
 
 
@@ -157,7 +157,9 @@ filter_check (struct bufferevent *bev)
 		}
 
 	free(data);
+	data = NULL;
 	free(addr_ip);
+	addr_ip = NULL;
 //	free(tmpbuf);
 
 	return test;
