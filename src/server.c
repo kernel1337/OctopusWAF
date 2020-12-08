@@ -1,6 +1,6 @@
 #include "server.h"
 
-// todo use in future
+// TODO,  use in future to laod certs... 
 void 
 LoadCertificates (SSL_CTX* ctx, char* CertFile, char* KeyFile)
 {

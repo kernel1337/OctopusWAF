@@ -102,6 +102,7 @@ filter_check (struct bufferevent *bev)
 		{
 			if (blocklist_ip(addr_ip) == true)
 			{
+				test = true;
 
 				if (param.debug == true)
 					printf("Block per address \nIP addr: %s\n input: %s\n", addr_ip, data);

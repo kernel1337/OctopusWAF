@@ -38,7 +38,7 @@
 #define CYAN "\033[22;36m"
 #define GREEN "\033[22;32m"
 #define LAST "\033[0m"
-
+void chomp(char * str);
 void die (char *msg);
 void No_Pause_Waf (void);
 void no_write_coredump (void);

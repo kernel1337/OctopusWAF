@@ -3,25 +3,22 @@
 #include "utils.h"
 
 
-// based in OpenBSD reallocarray() function http://man.openbsd.org/reallocarray.3
+
 void *
-xallocaarray (size_t nmemb, size_t size) 
+xreallocarray (void *ptr, size_t nmemb, size_t size) 
 {
 	if ((nmemb >= MUL_NO_OVERFLOW || size >= MUL_NO_OVERFLOW) && nmemb > 0 && SIZE_MAX / nmemb < size) 
-		die("integer overflow block");
+	{
+		DEBUG("integer overflow block");
+		exit(0);
+	}
 
-	size_t maxmem = nmemb*size;
+	void *p = realloc (ptr, nmemb*size);
 
-	char ptr2[maxmem];
+	if (p == NULL) 	
+		die("Error in xreallocarray() function");
 
-	void *ptr = (void *)ptr2;
-
-	if (ptr == NULL)
-		die("error in xallocarray() function");
-
-	memset(ptr,'\0',maxmem);
-
-	return ptr;
+	return p;
 }
 
 // based in OpenBSD reallocarray() function http://man.openbsd.org/reallocarray.3

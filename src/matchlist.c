@@ -1,7 +1,4 @@
-#include "mem_ops.h"
-#include "utils.h"
-#include "strsec.h"
-#include "match_algorithms.h"
+#include "matchlist.h"
 
 /* read lines of file matchlist.txt and test if match strings
 
@@ -10,35 +7,33 @@ if true returns matched string
 
 */
 
+void 
+load_all_rules()
+{
+	param.regex_rules = read_lines("config/regex_rules.txt");
+	param.match_rules = read_lines("config/match_list_request.txt");
+	param.block_addr_list = read_lines("config/blocklist_ip.txt");
+
+}
+
 
 char *
 matchlist (char *input,int input_len, short option_algorithm)
 {
-	FILE * arq;
 	bool at_list = false;
 	int line_len = 0;
+	char *line = NULL, *delim = "\n";
 
-	if (option_algorithm == 4)	
-		arq = fopen("config/regex_rules.txt", "r"); // if user choice regex need to use regex list
+	if (option_algorithm == 4)
+		line = strtok(param.regex_rules, delim);
 	else
-		arq = fopen("config/match_list_request.txt", "r");
+		line = strtok(param.match_rules, delim);
 
-	if( arq == NULL )
+
+	while(line != NULL)
 	{
-
-		DEBUG("error to open() file"); 	 
-		exit(0);
-		return NULL;
-	}
-
-	char line[1024];
-
-	burn_mem(line,0,1023);
-
-	while( fgets(line,sizeof(line),arq) && at_list==false )
-	{
-		line_len = strnlen(line,1023);		
-		line[line_len+1] = '\0';	
+		chomp(line);
+		line_len = strnlen(line,2048);			
 
 // remove \n\0 etc... sub -2 at line_len
 		if (line_len>4)		
@@ -61,20 +56,13 @@ matchlist (char *input,int input_len, short option_algorithm)
 				break; 
 			}
 
-		burn_mem(line,0,1023);
+		line = strtok(NULL, delim);
 	}
 
-	if (fclose(arq) == EOF)
-	{
-		DEBUG("Error in close() file config/matchlist_ip.txt ");
-		exit(0);
-	}
-		
-	arq = NULL;
 
 	if (at_list==true) 
 	{
-		char *tmp = xstrndup(line,1023);
+		char *tmp = xstrndup(line, line_len);
 		return tmp;
 	} else
 		return NULL;

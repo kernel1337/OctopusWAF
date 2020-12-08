@@ -39,7 +39,7 @@ init_banner_octopus (void)
 "\t                  ██▒▒▒▒▓▓████▓▓▓▓░░▓▓▓▓░░▓▓▓▓░░██            ██▓▓░░▓▓▓▓██         1 01        \n"
 "\t                    ██████    ████▓▓████████████                ████▓▓██            10100101010       \n"
    		YELLOW
-   		"\n\t OCTOPUS Web application firewall v0.4\n"
+   		"\n\t OCTOPUS Web application firewall v0.5\n"
    		LAST
   	);
 }
@@ -108,22 +108,20 @@ parser_opts (int argc, char **argv)
   		{
 // host
 			case 'h':
-				if ( strnlen(optarg,127) > 6 )
+				if ( strnlen(optarg,256) > 6 )
 				{
-					burn_mem(param.hostarg,0,127); // preserve 1 byte to canary
-					strlcpy(param.hostarg,optarg,128);	
+					param.hostarg=xstrndup(optarg,256);
 				} else {
 					die("Error at param host");
 				}
 			break;
 
 			case 'r':
-				if ( strnlen(optarg,127) > 6  )
+				if ( strnlen(optarg,256) > 6  )
 				{
-					burn_mem(param.redirectarg,0,127); // stack cookie preserve
-					strlcpy(param.redirectarg,optarg,128);	
+					param.redirectarg=xstrndup(optarg,256);	
 				} else {
-					die("Error at param host");
+					die("Error at param host to redirect");
 				}
 			break;
 
@@ -131,10 +129,9 @@ parser_opts (int argc, char **argv)
 			case 'l':
 				if (strnlen(optarg,127) > 1)
 				{
-					burn_mem(param.logfile,0,127); // stack cookie preserve
-					strlcpy(param.logfile,optarg,128);	
+					param.logfile=xstrndup(optarg,256);	
 				} else {
-					die("Error at param host");
+					die("Error at param log");
 				}
 			break;
 
@@ -166,7 +163,7 @@ parser_opts (int argc, char **argv)
 
 					param.option_algorithm = options_match;					
 				} else {
-					die("Error at param Log");
+					die("Error at param algorithm to match");
 				}
 			break;
 
@@ -192,5 +189,4 @@ parser_opts (int argc, char **argv)
 			break;
 
 		}
-
 }

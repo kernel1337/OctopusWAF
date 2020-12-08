@@ -1,5 +1,44 @@
 #include "file_ops.h"
-#include "mem_ops.h"
+
+
+//read lines of file
+char 
+*read_lines (char * NameFile)
+{
+	FILE * arq;
+
+	arq = fopen(NameFile, "r");
+
+	if( arq == NULL )
+	{
+		DEBUG("error in filename %s  to open() file:  %s",NameFile,strerror(errno));		
+		exit(0);
+	}
+
+	char *lineBuffer = xcalloc(1,1);
+	char *line = NULL;
+	size_t len = 0, tmp_len = 0;
+
+	while ( getline(&line, &len, arq) != -1  )  
+	{
+			
+		tmp_len += strnlen(line,2048);
+		lineBuffer = xreallocarray(lineBuffer, tmp_len, sizeof(char));
+		strlcat(lineBuffer,line, tmp_len);
+	}
+
+ 
+	if( fclose(arq) == EOF )
+	{
+		DEBUG("Error in close() file %s",NameFile);
+		exit(0);
+	}
+
+	arq = NULL;
+
+
+	return lineBuffer;
+}
 
 
 void 

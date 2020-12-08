@@ -14,9 +14,12 @@
 #include "utils.h"
 
 struct choice  {
-	char hostarg[128];
-	char redirectarg[128];
-	char logfile[128];
+	char *hostarg;
+	char *redirectarg;
+	char *logfile;
+	char *block_addr_list;
+	char *regex_rules;
+	char *match_rules;
 	bool debug;
 	bool libinjection_sqli;
 	bool libinjection_xss;

@@ -13,6 +13,23 @@
 #include "utils.h"
 #include "mem_ops.h"
 
+
+void 
+chomp(char * str)
+{
+ 
+	while (*str) 
+	{
+		if ( *str == '\n' || *str == '\r' ) 
+		{
+			*str = 0;
+			return;
+		}
+		str++;
+	}
+  
+}
+
 void 
 die (char *msg)
 {

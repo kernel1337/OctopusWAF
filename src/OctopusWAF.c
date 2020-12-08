@@ -12,8 +12,9 @@
 #include "validate.h"
 #include "opt_extract.h"
 #include "server.h"
+#include "matchlist.h"
 
-// todo use this in future for TLS
+// todo, use this in future for TLS (load certs)
 const char *ssl_certchain = "cert/certkey.pem";
 const char *ssl_privatekey = "cert/privateKey.key";
 
@@ -31,9 +32,16 @@ main(int argc, char **argv)
 	}
 
 
+	// parser argvs and get inputs
 	parser_opts(argc,argv);
 
-	init_banner_octopus();		
+	// show banner and helper
+	init_banner_octopus();
+
+	// Load satic rules in directory conf
+	load_all_rules();
+
+	// Start server...
 	start_octopus_server();
 
 	exit(0);
