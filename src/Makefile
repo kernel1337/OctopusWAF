@@ -6,7 +6,7 @@ CC=gcc
 
 # -mmitigate-rop is obsolete.
 # FIXME: -ftrapv isn't 'hardening', per-se...
-HARDENING=-g -fstack-protector-all -pie -fPIE -ftrapv
+HARDENING=-fstack-protector-all -pie -fPIE -ftrapv
 
 LDFLAGS=
 LIBS=-levent_openssl -lssl -lcrypto -levent -lpcre 
