@@ -17,25 +17,21 @@ load_all_rules()
 }
 
 
-char *
+bool
 matchlist (char *input,int input_len, short option_algorithm)
 {
 	bool at_list = false;
 	int line_len = 0;
-	char *line = NULL, *delim = "\n";
+	char *delim = "\n";
+	char *regex_list=strdup(param.regex_rules);
+	char *match_list=strdup(param.match_rules);
+	char *config = (option_algorithm==4)?regex_list:match_list;
+	char *line = strtok(config, delim);
 
-	if (option_algorithm == 4)
-		line = strtok(param.regex_rules, delim);
-	else
-		line = strtok(param.match_rules, delim);
-
-
-	while(line != NULL)
+	while(line != NULL && at_list == false)
 	{
-		chomp(line);
-		line_len = strnlen(line,2048);			
+		line_len = strnlen(line,2048);		
 
-// remove \n\0 etc... sub -2 at line_len
 		if (line_len>4)		
 			switch (option_algorithm)
 			{
@@ -59,13 +55,9 @@ matchlist (char *input,int input_len, short option_algorithm)
 		line = strtok(NULL, delim);
 	}
 
-
-	if (at_list==true) 
-	{
-		char *tmp = xstrndup(line, line_len);
-		return tmp;
-	} else
-		return NULL;
+	free(match_list);
+	free(regex_list);
+	return at_list;
 }
 
 

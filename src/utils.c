@@ -22,7 +22,7 @@ chomp(char * str)
 	{
 		if ( *str == '\n' || *str == '\r' ) 
 		{
-			*str = 0;
+			*str = '\0';
 			return;
 		}
 		str++;

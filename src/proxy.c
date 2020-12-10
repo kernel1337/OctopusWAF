@@ -96,7 +96,8 @@ filter_check (struct bufferevent *bev)
 
 	evbuffer_copyout(input, data, len);
 
-	char *tmpbuf = urldecode(data,strlen(data));
+	char *tmpbuf = urldecode(data,strnlen(data,6128));
+	int len_tmp = strnlen(tmpbuf,6128);
 
 		if (is_request(tmpbuf))
 		{
@@ -111,19 +112,18 @@ filter_check (struct bufferevent *bev)
 					log_make("Block per address", addr_ip, " ", 1);
 			}
 
-			if (param.option_algorithm)
+			if (param.option_algorithm != 0)
 			{
-				char *match_string = matchlist(tmpbuf,strlen(tmpbuf), param.option_algorithm);
-
-				if (match_string != NULL)
+				if (matchlist(tmpbuf,len_tmp, param.option_algorithm) == true)
 				{
 					test = true;
 
 					if (param.debug == true)
-						printf("IP addr: %s\n input: %s\n", addr_ip, data);
+						printf("Algorithm match!\n IP addr: %s\n input: %s\n", addr_ip, data);
 					
 					if (param.logfile)
 						log_make("Algorithm match", addr_ip, data, len);
+
 				}
 			}
 
@@ -142,9 +142,7 @@ filter_check (struct bufferevent *bev)
 
 			if (param.pcre == true)
 			{	
-				char *match_string = matchlist(tmpbuf,strlen(tmpbuf), 4);
-
-				if (match_string != NULL)
+				if (matchlist(tmpbuf,len_tmp, 4)==true)
 				{
 					test = true;
 

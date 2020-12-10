@@ -15,20 +15,19 @@ char
 		exit(0);
 	}
 
-	char *lineBuffer = xcalloc(1,1);
-	char *line = NULL;
-	size_t len = 0, tmp_len = 0;
-
-	while ( getline(&line, &len, arq) != -1  )  
+	fseek(arq, 0, SEEK_END);
+    	long length = ftell(arq);
+    	fseek(arq, 0, SEEK_SET);
+    	char *buffer = xmalloc(sizeof(char)*(length + 1));
+    	buffer[length] = '\0';
+	
+    	if (fread(buffer, sizeof(char), length, arq)<=0)
 	{
-			
-		tmp_len += strnlen(line,2048);
-		lineBuffer = xreallocarray(lineBuffer, tmp_len, sizeof(char));
-		strlcat(lineBuffer,line, tmp_len);
+		DEBUG("Config error Empty rule file %s",NameFile);
+		exit(0);
 	}
-
  
-	if( fclose(arq) == EOF )
+	if (fclose(arq) == EOF)
 	{
 		DEBUG("Error in close() file %s",NameFile);
 		exit(0);
@@ -36,10 +35,8 @@ char
 
 	arq = NULL;
 
-
-	return lineBuffer;
+	return buffer;
 }
-
 
 void 
 log_make (char *mode, char *addr_ip, char *data, size_t len_data)

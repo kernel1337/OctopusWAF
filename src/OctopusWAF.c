@@ -38,7 +38,7 @@ main(int argc, char **argv)
 	// show banner and helper
 	init_banner_octopus();
 
-	// Load satic rules in directory conf
+	// load rules in config directory
 	load_all_rules();
 
 	// Start server...

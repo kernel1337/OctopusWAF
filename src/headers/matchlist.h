@@ -12,6 +12,6 @@
 #include "match_algorithms.h"
 
 void load_all_rules();
-char *matchlist (char * input,int input_len,short option_algorithm);
+bool matchlist (char * input,int input_len,short option_algorithm);
 
 #endif

@@ -14,7 +14,6 @@ blocklist_ip (char * addr)
 
 	while (line != NULL && at_list==false)
 	{   
-	        chomp(line);	
 		if (strnstr(line,addr,128))
 			at_list = true;
 
