@@ -1,5 +1,7 @@
 #include "opt_extract.h"
 
+struct choice param;
+
 void 
 init_banner_octopus (void)
 {

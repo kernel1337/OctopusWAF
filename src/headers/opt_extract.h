@@ -27,7 +27,7 @@ struct choice  {
 	short option_algorithm;
 };
 
-struct choice param;
+extern struct choice param;
 
 void parser_opts (int argc, char **argv);
 void init_banner_octopus (void);

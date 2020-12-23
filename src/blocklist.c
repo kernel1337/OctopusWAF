@@ -2,6 +2,7 @@
 #include "mem_ops.h"
 #include "utils.h"
 #include "strsec.h"
+#include "opt_extract.h"
 
 //read lines of file
 bool 

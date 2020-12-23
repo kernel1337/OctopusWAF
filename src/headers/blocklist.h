@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include "mem_ops.h"
-#include "opt_extract.h"
 
 bool blocklist_ip (char * addr);
 

@@ -1,4 +1,5 @@
 #include "matchlist.h"
+#include "opt_extract.h"
 
 /* read lines of file matchlist.txt and test if match strings
 

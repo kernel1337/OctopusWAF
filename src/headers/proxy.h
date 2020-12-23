@@ -29,15 +29,16 @@
 #include <event2/keyvalq_struct.h>
 #include "blocklist.h"
 #include "validate.h"
-#include "opt_extract.h"
+/* #include "opt_extract.h"
+ * */
 #include "matchlist.h"
 #include "match_algorithms.h"
 #include "file_ops.h"
 
-struct event_base *base;
-struct sockaddr_storage listen_on_addr;
-struct sockaddr_storage connect_to_addr;
-int connect_to_addrlen;
+extern struct event_base *base;
+extern struct sockaddr_storage listen_on_addr;
+extern struct sockaddr_storage connect_to_addr;
+extern int connect_to_addrlen;
 
 #define MAX_OUTPUT (512*1024)
 static SSL_CTX *ssl_ctx = NULL;

@@ -1,5 +1,13 @@
 #include "proxy.h"
+#include "opt_extract.h"
 
+
+
+struct event_base *base;
+struct sockaddr_storage listen_on_addr;
+struct sockaddr_storage connect_to_addr;
+int connect_to_addrlen;
+//static SSL_CTX *ssl_ctx = NULL;
 
 char *
 addr_2_str (struct sockaddr *res)
